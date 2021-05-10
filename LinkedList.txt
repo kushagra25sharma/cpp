@@ -1,0 +1,238 @@
+#include <iostream>
+using namespace std;
+
+class Node{
+  public:
+    int data;
+    Node* next;
+};
+
+// add at the end
+void append(Node** head, int data){
+    Node* newNode = new Node();
+    newNode->data = data;
+    newNode->next = NULL;
+    if((*head) ==  NULL){
+        *head = newNode;
+        return;
+    }
+    Node* p = *head;
+    while(p->next != NULL){
+        p = p->next;
+    }
+    p->next = newNode;
+}
+
+// insert in between elements
+void insert(Node** head, int pos, int data){
+    Node* p = *head;
+    Node* q = *head;
+    Node* newNode = new Node();
+    newNode->data = data;
+    int cnt = 1;
+    while(cnt != pos && p->next != NULL){
+        cnt++;
+        p = p->next;
+        q = q->next;
+    }
+    if(p->next == NULL){
+        cout<<"End of the list. Position should be less than the size of the list and it can't be 0."<<endl;
+        return;
+    }
+    q = q->next;
+    newNode->next = q;
+    p->next = newNode;
+}
+
+// insert at 0th position
+void addBegin(Node** head, int data){
+    Node* newNode = new Node();
+    newNode->data = data;
+    newNode->next = *head;
+    *head = newNode;
+}
+
+// updates the data at given position
+void update(Node** head, int pos, int data){
+    Node* p = *head;
+    int cnt = 1;
+    while(p != NULL && cnt < pos){
+        p = p->next;
+        cnt++;
+    }
+    if(p == NULL){
+        cout<<"Invalid position"<<endl;
+        return;
+    }
+    p->data = data;
+}
+
+// deletes the last node
+void del(Node** head){
+    if(*head == NULL){
+        cout<<"List is empty"<<endl;
+        return;
+    }
+    Node* p = *head;
+    if(p->next == NULL){
+        *head = NULL;
+        return;
+    }
+    while(p->next->next != NULL){
+        p = p->next;
+    }
+    free(p->next);
+    p->next = NULL;
+}
+
+void delPos(Node** head, int pos){
+    if(*head == NULL){
+        cout<<"List is empty"<<endl;
+        return;
+    }
+    Node* p = *head;
+    Node* q = *head;
+    int cnt=1;
+    if(pos == 1){
+        cout<<"Can't perform the operation with this function"<<endl;
+    }
+    while(cnt < pos-1 && p->next != NULL){
+        cnt++;
+        p = p->next;
+        q = q->next;
+    }
+    if(p->next == NULL){
+        cout<<"Invalid position, should be less than the size of list."<<endl;
+        return;
+    }
+    q = q->next;
+    p->next = q->next;
+    free(q);
+}
+
+void delFirst(Node** head){
+    if(*head == NULL){
+        cout<<"List is empty"<<"\n";
+        return;
+    }
+    if((*head)->next == NULL){
+        *head = NULL;
+        return;
+    }
+    Node* p = *head;
+    p = p->next;
+    (*head)->next = NULL;
+    *head = p;
+}
+
+// print all elements
+void print(Node* head){
+    if((head) ==  NULL){
+        cout<<"No elements are present in list"<<endl;
+        return;
+    }
+    while(head != NULL){
+        cout<<head->data<<" ";
+        head = head->next;
+    }
+    cout<<'\n';
+}
+
+// returns the size;
+int getSize(Node* head){
+    int cnt = 0;
+    while(head != NULL){
+        cnt++;
+        head = head->next;
+    }
+    //cout<<"Size of list is: "<<cnt<<endl;
+    return cnt;
+}
+
+// reverses the linked list
+void reverseList(Node** head){
+    if(*head == NULL){
+        cout<<"List is empty"<<"\n";
+        return;
+    }
+    if((*head)->next == NULL){
+        return;
+    }
+    Node* p = *head;
+    Node* q = *head;
+    q = q->next;
+    p->next = NULL;
+    Node* t = q;
+    while(q->next != NULL){
+        t = t->next;
+        q->next = p;
+        p = q;
+        q = t;
+    }
+    q->next = p;
+    *head = q;
+}
+
+// data at aparticular position
+void displayAtPos(Node* head, int pos){
+    if(head == NULL){
+        cout<<"List is empty."<<endl;
+        return;
+    }
+    int cnt=1;
+    while(head != NULL && cnt < pos){
+        head = head->next;
+        cnt++;
+    }
+    if(head == NULL){
+        cout<<"Invalid position. Position should be less than or equal to the size of the list."<<endl;
+        return;
+    }
+    cout<<"Value at position "<<pos<<" is: "<<head->data<<endl;
+}
+
+// delete duplicates
+void deleteDuplicates(Node** head){
+    if(*head == NULL){
+        cout<<"List is empty"<<endl;
+        return;
+    }
+    if((*head)->next == NULL){
+        return;
+    }
+    Node* p = *head;
+    Node* q = *head;
+    Node* s = *head;
+    while(p != NULL){
+        int num = p->data;
+        s = p;
+        q = p->next;
+        while(q != NULL){
+            if(q->data == num){
+                s->next = q->next;
+                q = q->next;
+            }
+            else{
+                q = q->next;
+                s =s->next;
+            }
+        }
+        p = p->next;
+    }
+}
+
+int main() {
+  Node* head = NULL;
+  append(&head, 1);
+  append(&head, 2);
+  append(&head, 3);
+  append(&head, 4);
+  append(&head, 2);
+  append(&head, 3);
+  append(&head, 4);
+  append(&head, 1);
+  print(head);
+  deleteDuplicates(&head);
+  print(head);
+  return 0;
+}

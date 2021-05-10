@@ -1,0 +1,139 @@
+#include<bits/stdc++.h>
+using namespace std;
+# define ALBHABET_SIZE 26
+
+struct TrieNode{
+    struct TrieNode* children[ALBHABET_SIZE];//array of pointers for each node 
+    bool isEndOfWord;//if thr node is end of a string it will be true
+};
+
+struct TrieNode* createNode(){
+    struct TrieNode* pNode = new TrieNode();
+    for(int i=0;i<ALBHABET_SIZE;i++){
+        pNode->children[i] = NULL;//initializing all the pointer variables to null
+    }
+    return pNode;//returning the newly created node with array of pointers
+}
+
+void insert(struct TrieNode* root,string key){
+    struct TrieNode* pCrawl = root;
+    for(int i=0;i<key.size();i++){
+        int index = key[i] - 'a';
+        if(!pCrawl->children[index]){//checking if pointer to the child index is present in root
+            pCrawl->children[index] = createNode();//if not create a new node;
+        }
+        pCrawl = pCrawl->children[index];//storing the value at that last index in pCrawl i.e. now pCrawl is at the last index node
+    }
+    pCrawl->isEndOfWord = true;//as it is last index so it is the end of word
+   
+}
+
+bool search(struct TrieNode* root,string key){
+    struct TrieNode* pCrawl = root;
+    for(int i=0;i<key.size();i++){
+        int index = key[i] - 'a';
+        if(!pCrawl->children[index]){
+            return false;//if no node exist we return false
+        }
+        pCrawl = pCrawl->children[index];//pCrawl moving to next node
+    }
+    return (pCrawl->isEndOfWord && pCrawl != NULL);//returns true if pCrawl is end of the word and it is not equal to null
+}
+
+bool isEmpty(struct TrieNode* root){
+    for(int i=0;i<ALBHABET_SIZE;i++){
+        if(root->children[i])
+        return false;
+    }
+    return true;
+}
+
+struct TrieNode* remove(struct TrieNode* root,string key,int depth =0){
+    if(root == NULL)
+    return NULL;
+    
+    if(depth == key.size()){//case is implemented when we have reached the last node of key string
+        if(root->isEndOfWord)//checking if it is end of word then make it false as its no longer end as we are deleting that word
+        root->isEndOfWord = false;
+        
+        if(isEmpty(root)){//if the node has no child then delete it
+            delete(root);
+            root = NULL;
+        }
+        return root;//returning the child back to the parent node
+    }
+    
+    int index = key[depth] - 'a';//storing index for each letter of key and going to its child node to see if its present or not
+    root->children[index] = remove(root->children[index],key,depth+1);//depth+1 as the child will be the next letter in the word 
+                                   // when child is deleted we check for root 
+    if(isEmpty(root) && root->isEndOfWord == false){ //if the node is empty and its not the end of word for other word delete it
+        delete(root);
+        root = NULL;
+    }
+    return root;
+}
+
+int totalletters(struct TrieNode* root,int count = 0){
+    if(root == NULL)//for last case when we reach to leaf node ,return
+    return 0;
+    
+    for(int i=0;i<ALBHABET_SIZE;i++){//checking in the children array for the existence of child
+        if(root->children[i]){
+            count = totalletters(root->children[i],count);//if its present check foe its child
+            count++;//finally increase the count count will be increased in reverse order i.e. bottom up
+        }
+    }
+    return count;//return count
+}
+int totalwords(struct TrieNode* root,int count =0 ){
+    if(root == NULL)
+    return 0;
+    //same as for letters just oe change:
+    for(int i=0;i<ALBHABET_SIZE;i++){
+        if(root->children[i]){
+            count = totalwords(root->children[i],count);
+            if(root->children[i]->isEndOfWord)//looking for the end of the word to count words
+            count++;
+        }
+    }
+    return count;
+}
+
+void print(struct TrieNode* root,char s[],int level){
+    if(isEmpty(root) || root->isEndOfWord){//if node doesnot have any child it is end of the word
+        s[level] = '\0';
+        cout<<s<<endl;//print the word
+    }
+    int i;
+    for(int i=0;i<ALBHABET_SIZE;i++){
+        if(root->children[i]){
+            s[level] = i + 'a';
+            print(root->children[i],s,level+1);
+        }
+    }
+}
+
+int main() {
+    struct TrieNode * root = createNode();
+    string keys[] = {"the","there","their","answer","a","any","by","bye"};
+    int n = sizeof(keys)/sizeof(keys[0]);
+    for(int i=0;i<n;i++){
+        insert(root,keys[i]);
+    }
+    
+    search(root,"there")? cout<<"yes\n" : cout<<"no\n";
+    search(root,"ther")? cout<<"yes\n" : cout<<"no\n";
+    
+    remove(root,"a");
+    remove(root,"by");
+    remove(root,"buy");
+    search(root,"any")? cout<<"yes\n" : cout<<"no\n";
+    search(root,"by")? cout<<"yes\n" : cout<<"no\n";
+    
+    cout<<totalletters(root)<<endl;
+    cout<<totalwords(root)<<endl;
+    char s[20];
+    int level =0;
+    print(root,s,level);
+	return 0;
+}

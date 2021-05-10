@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+stack<int> sorti(stack<int> &input){
+    stack<int> news;
+    while(!input.empty()){
+    int temp  = input.top();
+    input.pop();
+    
+    while(!news.empty() && news.top()> temp){
+        input.push(news.top());
+        news.pop();
+    }
+    news.push(temp);
+    }
+    return news;
+}
+
+int main(){
+    stack<int> input;
+    input.push(-9);
+    input.push(23);
+    input.push(8);
+    input.push(-1);
+    input.push(1);
+     stack<int> news = sorti(input);
+    while(!news.empty()){
+        cout<<news.top()<<" ";
+        news.pop();
+    }
+    return 0;
+}

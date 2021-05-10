@@ -1,0 +1,97 @@
+#include <bits/stdc++.h>
+using namespace std;
+template<typename k>
+class HashTable{
+    vector<k> * table;
+    int capacity;
+    
+    int getIndex(int key){
+        return (key % capacity);
+    }
+    
+    int keycount(){
+        static int keyc = 0;
+        return (keyc ++)% capacity;
+    }
+    
+public :
+    HashTable(int n){
+        capacity = n;
+        table = new vector<k> [capacity];
+    }
+    
+    void insert(k value){
+        int key = keycount();
+        table[getIndex(key)].push_back(value);
+    }
+    
+    void deleteItem(k value){
+        int f=0;
+        for(int i=0;i<capacity;i++){
+            if(table[i].size() != 0){
+            for(auto j = table[i].begin();j != table[i].end();j++){
+                if(*j == value){
+                    table[i].erase(j);
+                    f =1;
+                    break;
+                }
+        }
+            if(f == 1){
+                break;
+            }
+        }
+        }
+        if(f == 1){
+            cout<<"deletion successful"<<endl;
+        }else{
+            cout<<"item not found"<<endl;
+        }
+    }
+    
+    void display(){
+        for(int i=0;i<capacity;i++){
+            if(table[i].size() != 0){
+                cout<<i<<" : ";
+                for(auto j = table[i].begin();j != table[i].end();j++){
+                    cout<<*j<<"->"; 
+                }
+                cout<<endl;
+            }
+        }
+    }
+    
+    bool isEmpty(){
+        for(int i=0;i<capacity;i++){
+            if(table[i].size() != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    int sizeofTable(){
+        int count =0;
+        for(int i=0;i<capacity;i++){
+            if(table[i].size() != 0){
+                count++;
+            }
+        }
+        return count;
+    }
+    
+};
+
+int main() {
+    char a[] = {'a','s','d','f','g','h','i'};
+    int n = sizeof(a)/sizeof(a[0]);
+    cout<<n<<endl;
+    HashTable<char> h(4);
+    for(int i=0;i<7;i++){
+        h.insert(a[i]);
+    }
+    h.deleteItem('o');
+    h.deleteItem('f');
+   h.display();
+   cout<<h.sizeofTable();
+	return 0;
+}

@@ -1,0 +1,86 @@
+#include <iostream>
+#include<stdlib.h>
+using namespace std;
+
+struct Node{
+    int n;
+    struct Node* next;
+};
+
+void add(int value,struct Node** head){
+    struct Node* newn = (struct Node*) malloc(sizeof(struct Node));
+    newn->n = value;
+    newn->next = NULL;
+    if(*head == NULL){
+        *head = newn;
+    }else{
+        struct Node* last = *head;
+        while(last->next != NULL){
+            last = last->next;
+        }
+        last->next = newn;
+    }
+}
+
+void duplicate(struct Node** head){
+    struct Node* current = *head;
+    struct Node* last = *head;
+    while(current != NULL){
+        last = current;
+        while(last->next != NULL){
+            if(current->n == last->next->n && last->next->next != NULL){
+                free(last->next);
+                last->next = last->next->next;
+            }
+            else if(current->n == last->next->n && last->next->next == NULL){
+                free(last->next);
+                last->next = NULL;
+            }
+            else{
+                last = last->next;
+            }
+        }
+        current = current->next;
+    }
+}
+
+void print(struct Node* head){
+    while(head){
+        cout<<head->n<<" ";
+        head = head->next;
+    }
+}
+
+int main() {
+    struct Node* head = NULL;
+    add(3,&head);
+	add(1,&head);
+		add(1,&head);
+			add(1,&head);
+	add(2,&head);
+		add(2,&head);
+		add(3,&head);
+	add(3,&head);
+	add(4,&head);
+//	add(5,&head);
+add(2,&head);
+    add(3,&head);
+    add(3,&head);
+   add(4,&head);
+		add(1,&head);
+		add(2,&head);
+		add(4,&head);
+			add(2,&head);
+		add(1,&head);
+		add(3,&head);
+			add(2,&head);
+			add(3,&head);
+			add(3,&head);
+			add(4,&head);
+
+	print(head);
+	duplicate(&head);
+	cout<<endl;
+	print(head);
+	return 0;
+}

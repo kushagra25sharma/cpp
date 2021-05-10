@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int josephus(int n,int k){
+    if(n == 1){
+        return 1;
+    }
+    else{
+        /*After the first person (kth from beginning) is killed,
+        n-1 persons are left. So we call josephus(n – 1, k) to get
+        the position with n-1 persons. But the position returned 
+        by josephus(n – 1, k) will consider the position starting 
+        from k%n + 1. So, we must make adjustments to the position 
+        returned by josephus(n – 1, k).*/
+        return (josephus(n-1,k) + k-1)% n + 1;
+        //+1 fter n because we are counting from 1 not 0;
+        //(k-1) because kth pos is killed k-1 previous left
+        //they will remain in the circle 
+    }
+}
+
+int main(){
+    int n = 5;
+    int k=2;
+    cout<<"last pos remaining  "<<josephus(n,k);
+    return 0;
+}

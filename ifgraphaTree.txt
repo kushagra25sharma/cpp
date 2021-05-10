@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Graph{
+    int v;
+    list<int> *adj;
+    bool isCycleUtil(int node,bool visited[],int parent);
+public:
+    bool isTree();
+    void addEdge(int u,int w);
+    Graph(int v);
+};
+
+Graph :: Graph(int v){
+    this->v = v;
+    adj = new list<int>[v];
+}
+
+void Graph :: addEdge(int u,int w){
+    adj[u].push_back(w);
+    adj[w].push_back(u);
+}
+
+bool Graph :: isCycleUtil(int node,bool visited[], int parent){
+    visited[node] = true;//marking the node as visited
+    list<int> :: iterator i;
+    for(i = adj[node].begin();i != adj[node].end();i++){//visiting the node's adjacent 
+        if(!visited[*i]){//if adjacent is not visited then apply cycle for that adjacent
+            if(isCycleUtil(*i,visited,node))
+                return true;
+        }
+        else if(*i != parent){//if adjacent is visited and is not a parent of current vertex eg-:     1 - 0
+            return true;                                             //                               |  /
+        }  // when 2 is visited and its adjacent i.e 0 is not a parent of 0                            2
+    }
+    return false;
+}
+
+bool Graph :: isTree(){
+    bool *visited = new bool[v];
+    for(int i=0;i<v;i++){
+        visited[i] = false;
+    }
+    
+    if(isCycleUtil(0,visited,-1)){//checking for cycle here we are passing starting node as 0 and it doesn't have any parent so -1
+        return false;
+    }
+    
+    for(int i=0;i<v;i++){// checking for connectivity
+        if(!visited[i]){//every node should be visited
+            return false;
+        }
+    }
+    return true;
+}
+
+int main() {
+	 Graph g1(5); 
+    g1.addEdge(1, 0); 
+    g1.addEdge(0, 2); 
+    g1.addEdge(0, 3); 
+    g1.addEdge(3, 4); 
+    g1.isTree()? cout << "Graph is Tree\n": 
+                 cout << "Graph is not Tree\n"; 
+  
+    Graph g2(5); 
+    g2.addEdge(1, 0); 
+    g2.addEdge(0, 2); 
+    g2.addEdge(2, 1); 
+    g2.addEdge(0, 3); 
+    g2.addEdge(3, 4); 
+    g2.isTree()? cout << "Graph is Tree\n": 
+                 cout << "Graph is not Tree\n";
+	return 0;
+}

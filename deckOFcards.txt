@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    if(n == 1){
+        cout<<"1"<<endl;
+        return 0;
+    }
+    
+        int start =0,n1,diff=1,last_element = 2;
+        while(1){
+            if(n == 1 || n == 2){
+                cout<<last_element<<endl;
+                break;
+            }
+            n1  = n -(n - start + 1)/2;//cards that will remain 
+            //after a complete cycle of n cards;
+            
+            diff *= 2;//diff will be doubled after each complete 
+            //cycle;
+            
+            if((n - start)%2 != 0){
+                start = 1;//if n is odd ie we will remove last card
+                //so 1 card will go at the end start =1 
+                // ie 1 card ahead of the first card
+            }
+            else{
+                start =0;
+                last_element += diff;
+                //add the diff to last_element
+            }
+            n = n1;
+        }
+        return 0;
+}

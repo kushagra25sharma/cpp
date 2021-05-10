@@ -1,0 +1,68 @@
+#include <iostream>
+using namespace std;
+
+struct Node{
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* newNode(int key){
+    struct Node* root = new Node();
+    root->data = key;
+    root->left = NULL;
+    root->right = NULL;
+    
+    return root;
+}
+
+struct Node* insert(struct Node* root,int key){
+    if(root == NULL){
+        return newNode(key);
+    }
+    if(root->data < key)
+    root->right = insert(root->right,key);
+    
+    else if(root->data > key)
+    root->left = insert(root->left,key);
+    
+    return root;
+}
+
+void inorder(struct Node* root){
+    if(root == NULL)
+    return;
+    
+    inorder(root->left);
+    cout<<root->data<<" ";
+    inorder(root->right);
+}
+
+int height(struct Node* root){
+    if(root == NULL)
+    return 0;
+    else{
+        int rlength = height(root->right);
+        int llength = height(root->left);
+        
+        if(rlength > llength)
+        return (rlength +1);
+        else return (llength +1);
+    }
+}
+
+int main() {
+    Node *root = NULL; 
+    root = insert(root, 50); 
+    insert(root, 30); 
+    insert(root, 20); 
+    insert(root, 40); 
+    insert(root, 70); 
+    insert(root, 60); 
+    insert(root, 80);
+    
+    inorder(root);
+    cout<<endl;
+    cout<<height(root);
+	return 0;
+}

@@ -1,0 +1,89 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void build(int node, int start, int end, int a[], int tree[]){
+    if(start == end){
+        // leaf node
+        tree[node] = a[start];
+    }
+    else{
+        int mid = (start + end)/2;
+        // traversing on left child
+        build(2*node, start, mid, a, tree);
+        // traversing on right child
+        build(2*node + 1, mid+1, end, a, tree);
+        // for query sum problem parent node will be sum of its child nodes
+        // for max element query problem parent will be maximum of child nodes
+        // tree[node] = tree[2*node] + tree[2*node + 1];
+        tree[node] = min(tree[2*node], tree[2*node + 1]);
+    }
+}
+
+void update(int node, int start, int end, int index, int val, int a[], int tree[]){
+    if(start == end){
+        // updating the leaf node and now we use bottom up recursion to make the corresponding changes
+        a[index] = val;
+        tree[node] = val;
+    }
+    else{
+        int mid = (start + end)/2;
+        if(start <= index && index <= mid){
+            update(2*node, start, mid, index, val, a, tree);
+        }
+        else{
+            update(2*node+1, mid+1, end, index, val, a, tree);
+        }
+        // tree[node] = tree[2*node] + tree[2*node + 1];
+        tree[node] = min(tree[2*node], tree[2*node + 1]);
+    }
+}
+
+int query(int node, int start, int end, int l, int r, int a[], int tree[]){
+    // if range represented by node lies outside the range of l - r
+    if(r < start || l > end){
+        // return 0;
+        return 10000000;
+    }
+    // if range represented by node lies inside the range of l - r
+    if(l <= start && end <= r){
+        return tree[node];
+    }
+    // if range represented by node lies partially inside the range of l - r
+    // return sum of left and right child
+    int mid = (start + end)/2;
+    int p1 = query(2*node, start, mid, l, r, a, tree);
+    int p2 = query(2*node + 1, mid+1, end, l, r, a, tree);
+    // return (p1 + p2);
+    return min(p1, p2);
+}
+
+int main() {
+  ios_base :: sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+  int n, q;
+  cin>>n>>q;
+  // maximum size of tree should be 4*n
+  int tree[400005];
+  int a[n+1];
+  for(int i=1;i<=n;i++){
+      cin>>a[i];
+  }
+  build(1, 1, n, a, tree);
+  for(int i=0;i<q;i++){
+      char ch;
+      cin>>ch;
+      if(ch == 'u'){
+          int ind,val;
+          cin>>ind>>val;
+          update(1, 1, n, ind, val, a, tree);
+
+      }
+      else{
+          int l, r;
+          cin>>l>>r;
+          cout<<query(1, 1, n, l, r, a, tree)<<'\n';
+      }
+  }
+  return 0;
+}

@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+struct Node{
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* newNode(int key){
+    struct Node* root = new Node();
+    root->data = key;
+    root->left = NULL;
+    root->right = NULL;
+    
+    return root;
+}
+
+struct Node* insert(struct Node* root,int key){
+    if(root == NULL){
+        return newNode(key);
+    }
+    if(root->data < key)
+    root->right = insert(root->right,key);
+    
+    else if(root->data > key)
+    root->left = insert(root->left,key);
+    
+    return root;
+}
+
+void inorder(struct Node* root){
+    if(root == NULL)
+    return;
+    
+    inorder(root->left);
+    cout<<root->data<<" ";
+    inorder(root->right);
+}
+
+void kthmaxUtil(struct Node* root,int k,int &count){
+    if(root == NULL || count>= k)
+    return;
+    
+    kthmaxUtil(root->right,k,count);
+    count++;
+    
+    if(count == k){
+        cout<<k<<"th max element is "<<root->data<<endl;
+        return;
+    }
+    
+    kthmaxUtil(root->left,k,count);
+}
+
+void kthmax(struct Node* root,int k){
+    int count =0;
+    
+    kthmaxUtil(root,k,count);
+}
+
+int main() {
+    Node *root = NULL; 
+    root = insert(root, 50); 
+    insert(root, 30); 
+    insert(root, 20); 
+    insert(root, 40); 
+    insert(root, 70); 
+    insert(root, 60); 
+    insert(root, 80);
+    
+    inorder(root);
+    cout<<endl;
+    for(int i=1;i<8;i++){
+        kthmax(root,i);
+    }
+	return 0;
+}

@@ -1,0 +1,100 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+  int n;
+  struct Node* next;
+};
+void pushfront(int data,struct Node** head){
+    struct Node* newn = new Node();
+    newn->n = data;
+    if(*head == NULL){
+        newn->next = NULL;
+    }else{
+        newn->next = *head;
+    }
+    *head = newn;
+}
+
+void pushback(int data,struct Node** head){
+    struct Node* newn = new Node();
+    newn->n = data;
+    newn->next= NULL;
+    if(*head == NULL){
+        *head = newn;
+    }else{
+        struct Node* last = *head;
+        while(last->next != NULL){
+            last = last->next;
+        }
+        last->next = newn;
+    }
+}
+
+void popfront(struct Node** head){
+    if(*head == NULL){
+        cout<<"list is empty no elements to pop"<<endl;
+    }else{
+        free(*head);
+        cout<<(*head)->n<<" ------ "<<endl;
+        *head = (*head)->next;
+        cout<<(*head)->n<<"_____________"<<endl;
+    }
+}
+
+int size(struct Node* head){
+    if(head == NULL){
+        return 0;
+    }
+    else{
+        int count=0;
+        struct Node* last = head;
+        while(last){
+            count++;
+            last = last->next;
+        }
+        return count;
+    }
+}
+void popback(struct Node** head){
+    if(head == NULL){
+        cout<<"list is empty no elements to display"<<endl;
+    }
+    else if(size(*head) == 1){
+        free(*head);
+        *head = NULL;
+    }
+    else{
+        struct Node* last = *head;
+        while(last->next->next != NULL){
+            last = last->next;
+        }
+        free(last->next);
+        last->next = NULL;
+    }
+}
+
+void print(struct Node* head){
+    if(head == NULL){
+        cout<<"list is empty no elements to display"<<endl;
+    }else{
+        struct Node* last  = head;
+        while(last){
+            cout<<last->n<<" ";
+            last = last->next;
+        }
+        cout<<endl;
+    }
+}
+int main() {
+    struct Node* head = NULL;
+    pushfront(23,&head);
+    pushback(43,&head);
+    pushback(12,&head);
+    print(head);
+     popback(&head);
+    print(head);
+   popfront(&head);
+    print(head);
+	return 0;
+}

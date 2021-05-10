@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define len 5
+class Stack{
+    std::queue<int> q1;
+    public:
+    void push(int n);
+    void pop();
+    void print();
+};
+
+void Stack :: push(int n){
+    if(q1.size() == len){
+        cout<<"stack is full"<<endl;
+    }else{
+        q1.push(n);
+        for(int i=0;i<(q1.size()-1);i++){
+            int temp = q1.front();
+            q1.pop();
+            q1.push(temp);
+        }
+    }
+}
+
+void Stack :: pop(){
+    if(q1.size() == 0){
+        cout<<"0 elements"<<endl;
+    }else{
+        q1.pop();
+    }
+}
+
+void Stack :: print(){
+    if(q1.size() == 0){
+        cout<<"empty";
+    }else{
+        int k = q1.size();
+        while(k != 0){
+            cout<<q1.front()<<" ";
+            int temp = q1.front();
+            q1.pop();
+            q1.push(temp);
+            k--;
+        }
+    }
+    cout<<endl;
+}
+
+int main(){
+    Stack s;
+    s.push(1);
+    s.push(2);
+    s.push(4);
+    s.push(3);
+    s.print();
+    s.print();
+    return 0;
+}

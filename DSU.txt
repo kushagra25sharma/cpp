@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+typedef pair <int, int> pii;
+#define int ll
+
+#define pb push_back
+#define F first
+#define S second
+#define _sz(x) ((int)x.size())
+
+#define fastio ios::sync_with_stdio(false),cin.tie(0),cout.tie(0)
+
+const int N = 2e5 + 10;
+map<int,int> cnt[N];
+int fa[N],c[N],sz[N];
+int n,k;
+int find(int x)
+{
+    if(x!=fa[x]) fa[x] = find(fa[x]);
+    return fa[x];
+}
+void merge(int x,int y)
+{
+    int fx = find(x),fy = find(y);
+    if(fx==fy) return;
+    if(sz[fx] < sz[fy]) swap(fx,fy);
+    sz[fx] += sz[fy];
+    fa[fy] = fx;
+    for(auto &[cs,num]:cnt[fy]){
+        cnt[fx][cs] += num;
+    }
+    cnt[fy].clear();
+}
+signed main()
+{
+    fastio;
+    cin >> n >> k;
+    for(int i = 1; i <= n; i++){
+        fa[i] = i;
+        sz[i] = 1;
+        cin >> c[i];
+        cnt[i][c[i]] = 1;
+    }
+    while(k--){
+        int op,a,b;
+        cin >> op >> a >> b;
+        if(op==1){
+            merge(a,b);
+        }else{
+            int fx = find(a);
+            if(cnt[fx].count(b)){
+                cout << cnt[fx][b] << endl;
+            }else cout << 0 << endl;
+        }
+    }
+    return 0;
+}

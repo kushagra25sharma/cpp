@@ -1,0 +1,84 @@
+#include<iostream>
+using namespace std;
+
+class Stack{
+  int a[5];
+  static int count;
+  public:
+  void pop();
+  void push(int n);
+  void sorti();
+  void print();
+};
+int Stack :: count =0;
+
+void Stack :: push(int n){
+    if(count == 5){
+        cout<<"stack is full"<<endl;
+    }else{
+        a[5-count-1] = n;
+        count ++;
+    }
+}
+
+void Stack :: pop(){
+    if(count == 0){
+        cout<<"empty"<<endl;
+    }else{
+        count--;
+    }
+}
+
+void Stack :: sorti(){
+    int size = count;
+   int b[size];
+   int k=0;
+   for(int i=0;i<size;i++){
+       int top = a[i];
+       pop();
+       
+       if(i == 0 || b[i-1] < top){
+           b[i] = top;
+       }else{
+           k = i-1;
+           while(k != 0){
+               if(top <b[k]){
+                   b[k+1] =b[k];
+                   k--;
+               }else{
+                   break;
+               }
+           }
+           b[k+1] = top;
+       }
+   }
+   for(int i=0;i<size;i++){
+       cout<<b[i]<<" ";
+   }
+   cout<<endl;
+}
+
+void Stack :: print(){
+    if(count == 0){
+        cout<<"stack is empty";
+    }else{
+    for(int i=(5-count);i<5;i++){
+        cout<<a[i]<<" ";
+    }
+    }
+    cout<<endl;
+}
+
+
+int main(){
+    Stack s;
+    s.push(1);
+    s.push(-1);
+    s.push(8);
+    s.push(23);
+    s.push(-9);
+    s.print();
+    s.sorti();
+    //s.print();
+    return 0;
+}

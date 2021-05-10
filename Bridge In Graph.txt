@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+int n;
+vector<int> v[200001];
+int currTime = 0;
+
+void dfs(int low[], int disc[], int vis[], int parent[], int vertex){
+    currTime += 1;
+    vis[vertex] = 1;
+    disc[vertex] = low[vertex] = currTime;
+    for(auto z : v[vertex]){
+        if(!vis[z]){
+            parent[z] = vertex;
+            dfs(low, disc, vis, parent, z);
+            low[vertex] = min(low[vertex], low[z]);
+            if(low[z] > disc[vertex]){
+                cout<<vertex<<" "<<z<<" -- ";
+            }
+        }
+        else if(parent[vertex] != z){
+            low[vertex] = min(low[vertex], disc[z]);
+        }
+    }
+}
+
+int main(){
+    ios_base::sync_with_stdio(false); 
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int m;
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        int x,y;
+        cin>>x>>y;
+        v[x].push_back(y);
+        v[y].push_back(x);
+    }
+    int low[n] = {200001};
+    int disc[n]= {0};
+    int vis[n] = {0};
+    int parent[n] = {-1};
+    dfs(low, disc, vis, parent, 0);
+    return 0;
+}

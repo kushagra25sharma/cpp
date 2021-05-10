@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int MAX = 1e5 + 5;
+int id[MAX];
+pair<ll, pair<int, int>> v[MAX];
+
+void initialize(int n){
+    for(int i=0;i<=n;i++){
+        id[i] = i;
+    }
+}
+
+int root(int x){
+    // checking if x is parent of x according to base condition where we initialize id[x] = x
+    // until we satisfy the condition we will put x as parent(id[x]) of x
+    // for better understanding see the below function
+    while(id[x] != x){
+        id[x] = id[id[x]];
+        x = id[x];
+    }
+    return x;
+}
+
+
+// int find(int x)
+// {
+//     // Finds the representative of the set
+//     // that x is an element of
+//     // here parent[x] is id[x] 
+//     if (parent[x] != x) {
+  
+//         // if x is not the parent of itself
+//         // Then x is not the representative of
+//         // his set,
+//         parent[x] = find(parent[x]);
+  
+//         // so we recursively call Find on its parent
+//         // and move i's node directly under the
+//         // representative of this set
+//     }
+  
+//     return parent[x];
+// }
+
+void Union(int x, int y){
+    // int p = root(x);
+    // int q = root(y);
+    id[x] = id[y];
+}
+
+ll kruskal(int m){
+    ll ans = 0;
+    for(int i=0;i<m;i++){
+        ll w = v[i].first;
+        int x = v[i].second.first;
+        int y = v[i].second.second;
+        // checking if selected edge is creating a cycle or not if not then add to ans
+        int root1 = root(x);
+        int root2 = root(y);
+        // if they have same root then there is a loop
+        if(root1 != root2){
+            ans += w;
+            Union(root1, root2);
+        }
+    }
+    return ans;
+}
+
+int main(){
+    ios_base::sync_with_stdio(false); 
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int n,m; // no of nodes and edges
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        int x,y;
+        ll w;
+        cin>>x>>y>>w;
+        v[i] = {w, {x, y}};
+    }
+    sort(v, v+m);
+    initialize(n);
+    cout<<kruskal(m);
+    return 0;
+}

@@ -1,0 +1,72 @@
+#include<iostream>
+using namespace std;
+# define size 5
+class Stack{
+    static int count;
+   int a[size];
+public:
+
+   void pop();
+   void peek();
+   void push(int x);
+   bool isEmpty();
+};
+int Stack :: count =0;
+void Stack :: push(int x){
+    if(count < size){
+        a[size-count-1] = x;
+        cout<<x<<" added"<<endl;
+        count++;
+    }else{
+        cout<<"stack overflow"<<endl;
+    }
+}
+bool Stack :: isEmpty(){
+    if(count == 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+void Stack :: pop(){
+    if(isEmpty()){
+        cout<<"stack is empty no elements to pop"<<endl;
+    }else{
+        cout<<a[size-count]<<" is poped"<<endl;
+        count--;
+    }
+}
+void Stack ::  peek(){
+    if(isEmpty()){
+        cout<<"Stack is empty no elements to display"<<endl;
+    }else{
+        int i = count;
+        while(i != 0){
+            cout<<a[size-i]<<" ";
+            i--;
+        }
+    }
+    cout<<endl;
+}
+
+int main(){
+    Stack s;
+    s.push(3);
+    s.push(7);
+    s.push(9);
+    s.push(11);
+    s.push(23);
+    s.peek();
+    s.push(234);
+    s.pop();
+    s.pop();
+    s.pop();
+    s.pop();
+    s.peek();
+    s.push(11);
+    s.push(23);
+    s.peek();
+    s.pop();
+    s.peek();
+    return 0;
+}

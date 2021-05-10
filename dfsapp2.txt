@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+# define lli long long int
+
+const int N = 1e5 + 7;
+vector<lli> p(N),h(N),gr[N],a(N),g(N);
+bool ok = true;
+
+void dfs(lli u,lli prev = -1){
+    a[u] = p[u];
+    lli sum=0;
+    for(auto to : gr[u]){
+        if(to == prev){
+            continue;
+        }
+        dfs(to,u);
+        a[u] += a[to];
+        sum += g[u];
+    }
+    //(a[u]+h[u]) is a multiple of 2
+    if((a[u]+h[u])%2){                  //g[u] + b[u] = a[u];     b[u] people having bad mood in city u;
+        ok = false;                     //g[u] - b[u] = h[u];  =>  g[u] = (a[u) + h[u])/2;
+    }
+    g[u] = (a[u] + h[u])/2;
+    
+    if(g[u] <0 || g[u]> a[u]){  //hapy people can't be greater than total people 
+        ok = false;             // and they can't be in negative
+    }
+    
+    if(sum > g[u]){  // sum of happy people can't be greater than the max happy people
+        ok = false;
+    }
+}
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        lli n,m;
+        cin>>n>>m;
+        for(auto i=0;i<n;i++){
+            cin>>p[i];
+        }
+        for(auto i=0;i<n;i++){
+            cin>>h[i];
+        }
+        for(auto i=0;i<n-1;i++){
+            lli u,v;
+            cin>>u>>v;
+            u--;
+            v--;
+            gr[u].push_back(v);
+            gr[v].push_back(u);
+        }
+        dfs(0);
+        if(ok){
+            cout<<"YES";
+        }else{
+            cout<<"NO";
+        }
+        cout<<endl;
+        ok = true;
+        h.clear();
+        p.clear();
+        a.clear();
+        g.clear();
+        for(auto i =0;i<n;i++){
+            gr[i].clear();
+        }
+    }
+    return 0;
+}

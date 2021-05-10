@@ -1,0 +1,55 @@
+class Solution {
+public:
+string longestPalindrome(string s) {
+//what we will do is we will first find the palindrome by checking
+//consecutive two characters (in case of even palindrome) and then we
+//will expand it to the left and right direction
+int start=0;
+int end =1; // this is the start and end index of the final longest palindrome
+
+    //we will use left and right to find the palindrome and then will use it to expand both ways
+    int left;
+    int right;
+    int length=s.size();
+    for(int i =1;i<length;i++){
+        
+        
+        //checking for palindrome of type abba (even string)
+        left=i-1;
+        right=i;
+        while(left >= 0 && right < length && s[left] == s[right]){   
+            //checking if the length of this palindrome is greater than the current length
+            if(right-left+1>end){
+                //if it is greater
+                start=left;
+                end=right-left+1;
+            }
+            //now expand it to left and right
+            left--;
+            right++;
+            
+        }
+        
+        //now checking for palindrom of type abxba (odd length)
+        //entire code will be same, we just need to change right
+        left=i-1;
+        right=i+1;
+        // if the string is axa then left will be pointing at the extreme left"a"
+        // and the right will be pointing at the exteme right "a"
+        
+           while(left>=0 && right < length && s[left] == s[right]){   
+            //checking if the length of this palindrome is greater than the current length
+            if(right-left+1>end){
+                //if it is greater
+                start=left;
+                end=right-left+1;
+            }
+            //now expand it to left and right
+            left--;
+            right++;
+            
+        }
+    }
+              return s.substr(start,end);
+    }
+};

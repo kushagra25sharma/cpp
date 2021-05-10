@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void evaluate(string s){
+    char x;
+    stack<char> st;
+    for(int i=0;i<s.length();i++){
+        if(s[i] == '(' || s[i] == '{' || s[i] == '['){
+            st.push(s[i]);
+            
+        }
+        
+        if(st.empty()){
+            cout<<"false1";
+            return;
+        }
+        switch(s[i]){
+            case ']':
+            
+                     x = st.top();
+                     st.pop();
+                     if(x == '{' || x == '('){
+                         cout<<"false2";
+                         return;
+                     }
+                     break;
+            case '}':
+            
+                    x = st.top();
+                    st.pop();
+                    if(x == '(' || x == '['){
+                         cout<<"false3";
+                         return;
+                     }
+                     break;
+            case ')':
+            
+                    x = st.top();
+                    st.pop();
+                    if(x == '[' || x == '{'){
+                         cout<<"false4";
+                         return;
+                     }
+                     break;
+        }
+    }
+    if(st.empty()){
+        cout<< "true";
+    }else
+    cout<<"false5";
+}
+
+int main(){
+    string s = "({[]})";
+    evaluate(s);
+    return 0;
+}

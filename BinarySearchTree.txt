@@ -1,0 +1,206 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int f=0;
+
+class Node{
+    public:
+        int data;
+        Node* left;
+        Node* right;
+        Node(int n){
+           data = n;
+           left = NULL;
+           right = NULL;
+        }
+};
+
+void add(Node** root, int data){
+    if(*root == NULL){
+        *root = new Node(data);
+        return;
+    }
+    if((*root)->data < data){
+        if((*root)->right == NULL){
+            (*root)->right = new Node(data);
+            return;
+        }
+        add(&((*root)->right), data);
+    }
+    else{
+        if((*root)->left == NULL){
+            (*root)->left = new Node(data);
+            return;
+        }
+        add(&((*root)->left), data);
+    }
+}
+
+Node* search(Node* root, int data){
+    if(root == NULL){
+        cout<<"Tree is empty"<<endl;
+        return root;
+    }
+    if(root->data == data){
+        cout<<"present"<<endl;
+        return root;
+    }
+    if(root->data < data){
+        if(root->right == NULL){
+            cout<<"No node present with this value"<<endl;
+            return root->right;
+        }
+        else{
+            return search(root->right, data);
+        }
+    }
+    else{
+        if(root->left == NULL){
+            cout<<"No node present with this value"<<endl;
+            return root->left;
+        }
+        else{
+            return search(root->left, data);
+        }
+    }
+}
+
+void inorder(Node* root){
+    if(root == NULL){
+        cout<<"Tree is empty"<<endl;
+        return;
+    }
+    if(root->left != NULL){
+        inorder(root->left);
+    }
+    cout<<root->data<<" ";
+    if(root->right != NULL){
+        inorder(root->right);
+    }
+}
+
+void preorder(Node* root){
+    if(root == NULL){
+        cout<<"Tree is empty"<<endl;
+        return;
+    }
+    cout<<root->data<<" ";
+    if(root->left != NULL){
+        preorder(root->left);
+    }
+    if(root->right != NULL){
+        preorder(root->right);
+    }
+}
+
+void postorder(Node* root){
+    if(root == NULL){
+        cout<<"Tree is empty"<<endl;
+        return;
+    }
+    if(root->left != NULL){
+        postorder(root->left);
+    }
+    if(root->right != NULL){
+        postorder(root->right);
+    }
+    cout<<root->data<<" ";
+}
+
+void deleteNode(Node** root,int data){
+    if(*root == NULL){
+        cout<<"TREE IS EMPTY"<<"\n";
+        return;
+    }
+    // if we have to delete root
+    if((*root)->data == data){
+        Node* p = *root;
+        if(p->left != NULL){
+            p= p->left;
+            while(p->right != NULL){
+                p = p->right;
+            }
+            p->right = (*root)->right;
+            *root = p;
+        } else {
+            if((*root)->right != NULL){
+                *root = (*root)->right;
+            }
+            else{
+                *root = NULL;
+            }
+        }
+    } else{
+        if((*root)->data > data){
+            if((*root)->left != NULL){
+                deleteNode(&((*root)->left), data);
+            } else {
+                cout<<"NO node exists with this value"<<endl;
+                return;
+            }
+        } else {
+            if((*root)->right != NULL){
+                deleteNode(&((*root)->right), data);
+            } else {
+                cout<<"NO node exists with this value"<<endl;
+                return;
+            } 
+       }
+    }
+}
+
+void kthNodeFromLastUtill(Node* root, int k, int &cnt, int &f){
+    if(root == NULL){
+        cout<<"Tree is empty"<<endl;
+        return;
+    }
+    if(cnt > k){
+        if(f == 0){
+            cout<<"Invalid input"<<endl;
+        }
+        return;
+    }
+    if(root->right != NULL){
+        kthNodeFromLastUtill(root->right, k, cnt, f);
+    }
+    cnt++;
+    if(cnt == k){
+        cout<<k<<" node form last is "<<root->data<<endl;
+        f=1;
+        return;
+    }
+    if(root->left != NULL){
+        kthNodeFromLastUtill(root->left, k, cnt, f);
+    }
+}
+
+void kthNodeFromLast(Node* root, int k){
+    int cnt =0, f=0;
+    kthNodeFromLastUtill(root, k, cnt, f);
+}
+
+int main() {
+    Node* root = NULL;
+    add(&root, 20);
+    add(&root, 10);
+    add(&root, 30);
+    add(&root, 8);
+    add(&root, 12);
+    add(&root, 5);
+    add(&root, 9);
+    add(&root, 11);
+    add(&root, 15);
+    add(&root, 25);
+    add(&root, 40);
+    add(&root, 45);
+    add(&root, 35);
+    add(&root, 22);
+    add(&root, 29);
+    //deleteNode(&root, 8)
+    // inorder(root);
+    // cout<<endl;
+    int k;
+    cin>>k;
+    kthNodeFromLast(root, k);
+	return 0;
+}

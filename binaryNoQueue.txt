@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+#include<bits/stdc++.h>
+
+int main() {
+queue<string> q ;
+int n;
+	q.push("1");
+	cin>>n;
+	while(n--){
+	    string s1 = q.front();
+	    string s2 =s1;
+	    q.pop();
+	    cout<<s1<<" ";
+	    q.push(s1.append("0"));
+	    q.push(s2.append("1"));
+	}
+	return 0;
+}

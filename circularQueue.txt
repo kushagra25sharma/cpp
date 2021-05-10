@@ -1,0 +1,67 @@
+#include <iostream>
+using namespace std;
+# define size 5
+class Deque{
+    static int count;
+    static int front;
+    static int rear;
+    int a[size];
+    public:
+    void insert(int x);
+    void cut();
+    void show();
+};
+int Deque :: count = 0;
+int Deque :: front = 0;
+int Deque :: rear = 0;
+
+void Deque :: insert(int x){
+    if(count == size){
+        cout<<"queue is full "<<endl;
+    }else{
+        a[rear] = x;
+        rear = (rear+1)%size;
+        count++;
+    }
+}
+
+void Deque :: cut(){
+    if(count == 0){
+        cout<<"queue is empty "<<endl;
+    }else{
+        front =(front + 1)%size;
+        count--;
+    }
+}
+
+void Deque :: show(){
+    if(count == 0 ){
+        cout<<"queue is empty "<<endl;
+    }else{
+        for(int j=count,i=front;j!=0;j--){
+            cout<<a[i]<<" ";
+            i = (i+1)%size;
+        }
+        cout<<endl;
+    }
+}
+
+int main() {
+    Deque d;
+	d.show();
+	d.insert(64);
+	d.insert(54);
+	d.insert(44);
+	d.insert(34);
+	d.insert(24);
+	d.show();
+	d.insert(14);
+	d.cut();
+	d.cut();
+	d.cut();
+	d.show();
+	d.cut();
+	d.insert(90);
+	d.show();
+	return 0;
+}

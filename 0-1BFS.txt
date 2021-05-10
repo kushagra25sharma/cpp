@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    ios_base :: sync_with_stdio(false);
+    cin.tie(NULL);
+    int n,m,sx,sy,ex,ey;
+    cin>>n>>m>>sx>>sy>>ex>>ey;
+    sx--;sy--;ex--;ey--;
+    deque<int> dx,dy;
+    dx.push_front(sx);
+    dy.push_front(sy);
+    char ** a = new char * [n];
+    int ** dist = new int * [n];
+    for(int i=0;i<n;i++){
+        a[i] = new char [m];
+        dist[i] = new int [m];
+        for(int j=0;j<m;j++){
+            cin>>a[i][j];
+            dist[i][j] = 10e8;
+        }
+    }
+    int pos[][2] =  {{-1,0},{1,0},{0,-1},{0,1}};
+    dist[sx][sy] = 0;
+    while(!dx.empty()){
+        int curx = dx.front();
+        int cury = dy.front();
+        
+        dx.pop_front();dy.pop_front();
+        int nx,ny;
+        for(int i=0;i<4;i++){
+            nx = curx + pos[i][0];
+            ny = cury + pos[i][1];
+            if(nx <0 || ny <0 || nx>=n || ny>=m || a[nx][ny] == '#'){
+                continue;
+            }
+            if(dist[nx][ny] > dist[curx][cury]){
+                dist[nx][ny] = dist[curx][cury];
+                dx.push_front(nx);
+                dy.push_front(ny);
+            }
+        }
+        for(int i=curx-2;i<=curx+2;i++){
+            for(int j= cury-2;j<=cury+2;j++){
+                if(i <0 || j <0 || i>=n || j>=m || a[i][j] == '#'){
+                    continue;
+                }
+                if(dist[i][j] > dist[curx][cury] + 1){
+                    dist[i][j] = dist[curx][cury]+1;
+                    dx.push_back(i);
+                    dy.push_back(j);
+                }
+            }
+        }
+    }
+    (dist[ex][ey] > 10e5)? cout<<"-1" : cout<<dist[ex][ey]; 
+    return 0;
+}

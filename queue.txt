@@ -1,0 +1,66 @@
+#include<iostream>
+using namespace std;
+#define size 5
+
+class Queue{
+private:
+    static int rear;
+    int a[size];
+public:
+    void Enqueue(int x);
+    void Dequeue();
+    void Display();
+};
+int Queue :: rear = 0;
+
+void Queue :: Enqueue(int x){
+    if(rear == size){
+        cout<<"Queue is full"<<endl;
+    }else{
+        a[rear] = x;
+        cout<<x<<" is added"<<endl;
+        rear ++;
+    }
+}
+
+void Queue :: Dequeue(){
+    if(rear == 0){
+        cout<<"Queue is empty"<<endl;
+    }else{
+        rear--;
+        for(int i=0;i<rear;i++){
+            a[i] = a[i+1];
+        }
+    }
+}
+
+void Queue :: Display(){
+    if(rear  == 0){
+        cout<<"Queue is empty no elements to display"<<endl;
+    }else{
+        for(int i=0;i<rear;i++){
+            cout<<a[i]<<" ";
+        }   
+    }
+    cout<<endl;
+}
+
+int main(){
+    Queue q;
+    q.Enqueue(24);
+    q.Enqueue(1);
+    q.Enqueue(2123);
+    q.Enqueue(45);
+    q.Enqueue(241);
+    q.Enqueue(23);
+    q.Display();
+    q.Dequeue();
+    q.Dequeue();
+    q.Dequeue();
+    q.Dequeue();
+    q.Dequeue();
+    q.Display();
+    q.Dequeue();
+    q.Enqueue(23);
+    return 0;
+}

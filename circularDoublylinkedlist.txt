@@ -1,0 +1,141 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+struct Node{
+    int n;
+    struct Node* next;
+    struct Node* prev;
+};
+
+void add(int data,struct Node** head){
+    struct Node* newn = new Node();
+    newn->n = data;
+    if(*head == NULL){
+        newn->next = NULL;
+        newn->prev = NULL;
+        *head = newn;
+    }else if((*head)->next == NULL && (*head)->prev == NULL){
+        newn->next = *head;
+        newn->prev = *head;
+        (*head)->next = newn;
+        (*head)->prev = newn;
+    }else{
+        struct Node* last = *head;
+        while(last->next != *head){
+            last = last->next;
+        }
+        last->next = newn;
+        newn->prev = last;
+        newn->next = *head;
+        (*head)->prev = newn;
+    }
+}
+
+void add2(int pos,int data,struct Node** head){
+    struct Node* last = *head;
+    struct Node* newn = new Node();
+    newn->n = data;
+    for(int i=1;i<pos;i++){
+        last = last->next;
+    }
+    last->next->prev = newn;
+    newn->next = last->next;
+    last->next = newn;
+    newn->prev = last;
+}
+
+int size(struct Node* head){
+    struct Node* last = head;
+    if(head == NULL){
+        return 0;
+    }
+    else if(head->next == NULL){
+        return 1;
+    }
+    else{
+        int count=1;
+        while(last->next != head){
+           count++;
+           last = last->next;
+        }
+        return count;
+    }
+}
+
+void cut(int pos,struct Node** head){
+    if(pos>size(*head)){
+        cout<<"invalid pos"<<endl;
+    }else{
+         struct Node* last = *head;
+        for(int i =1;i<pos;i++){
+            last = last->next;
+        }
+        if(size(*head) <=2){
+            if(size(*head) == 1){
+                *head = NULL;
+            }else{
+                if(pos == 1){
+                    last->next->prev = NULL;
+                    last->next->next = NULL;
+                    *head = last->next;
+                }else{
+                    last->prev->next = NULL;
+                    last->prev->prev = NULL;
+                }
+            }
+        }
+        else{
+        if(pos == 1){
+            last->next->prev = (*head)->prev;
+            (*head)->prev->next = last->next;
+            *head = last->next;
+        }
+        else if(pos == size(*head)){
+            last->prev->next = *head;
+            (*head)->prev = last->prev;
+        }
+        else{
+            last->next->prev = last->prev;
+            last->prev->next = last->next;
+        }
+        }
+        free(last);
+    } 
+}
+
+void print(struct Node* head){
+    struct Node* last = head;
+    if(head == NULL){
+        cout<<"list is empty";
+    }else if(last->next == NULL && last->prev == NULL){
+        cout<<last->n;
+    }else{
+        while(last->next != head){
+            cout<<last->n<<" ";
+            last= last->next;
+        }
+        cout<<last->n;
+    }
+    cout<<endl;
+}
+int main(){
+    struct Node* head = NULL;
+    cout<<"size "<<size(head)<<endl;
+    add(3,&head);
+    cout<<"size "<<size(head)<<endl;
+    add(7,&head);
+    add(14,&head);
+    print(head);
+    add2(2,11,&head);
+    print(head);
+    cout<<"size "<<size(head)<<endl;
+    cut(1,&head);
+    cout<<"size "<<size(head)<<endl;
+    print(head);
+    // 7 11 14
+    cut(2,&head);
+    print(head);
+    cut(2,&head);
+     print(head);
+    return 0;
+}

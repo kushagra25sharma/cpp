@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int ans =0;//max size will be the ans
+
+int check(int x,int y,int n,int m,int(**a)){
+    if(x <0 || y<0 || x >=n || y >=m){
+        return 0;
+    }
+    return a[x][y];
+}
+
+void dfs(int x,int y,int n,int m,int (**a),bool (**b),int sz){//backstracking loop
+    if(y >= m || x >= n){//if x or y is out of the array return;
+        return;
+    }
+    
+    b[x][y] = true;//mark the current index as visited
+    sz++;//increase the size as it is '1'
+    if(sz > ans){
+        ans = sz;
+    }
+    int d [][2] = {{0,1},{0,-1},{1,0},{-1,0},{1,1},{1,-1},{-1,-1},{-1,1}};//all possible directions(8)
+    for(int i=0;i<8;i++){
+        int nx = x + d[i][0];
+        int ny = y + d[i][1];
+        int val = check(nx,ny,n,m,a);//for each direction checking if the adjacent (nx,ny) of(x,y) is 1 or not
+        if(val == 1 && !b[nx][ny]){//if its 1 and not visited then go for its adjacents ie adjacents of (nx,ny)
+            dfs(nx,ny,n,m,a,b,sz);
+        }
+    }
+    b[x][y] = false;//mark it as unvisited as it can be involved for another index ;
+}
+
+int main(){
+    ios_base :: sync_with_stdio(false);
+    cin.tie(NULL);
+    int n,m,sz=0;
+    cin>>n>>m;
+    int ** a = new int * [n];
+    bool ** b = new bool * [n];
+    for(int i=0;i<n;i++){
+        a[i] = new int [m];
+        b[i] = new bool [m];
+        for(int j=0;j<m;j++){
+            int num;
+            cin>>num;
+            a[i][j] = num;
+            b[i][j] = false;
+        }
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(a[i][j] == 1){
+                dfs(i,j,n,m,a,b,sz);//if num is 1 we cnt its adjacents which are also 1 in all the directions;
+            }                        //including diagonals; sz is current size i.e 0 before starting
+        }                           // if no adjacents are present sz = 1 i.e tyhe no itself;
+    }
+    cout<<ans;
+    return 0;
+}

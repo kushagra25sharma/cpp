@@ -1,0 +1,57 @@
+#include <iostream>
+#include<stdlib.h>
+using namespace std;
+
+struct Node {
+    int n;
+    struct Node* next;
+};
+
+void add(int value,struct Node** head){
+    struct Node* newn = (struct Node*)  malloc(sizeof(struct Node));
+    newn->n = value;
+    newn->next = NULL;
+    if(*head == NULL){
+        *head = newn;
+    }else{
+        struct Node* last = *head;
+        while(last->next != NULL){
+            last = last->next;
+        }
+        last->next = newn;
+    }
+}
+
+void print(struct Node* head){
+    while(head){
+        cout<<head->n<<" ";
+        head = head->next;
+    }
+}
+
+void reverse(struct Node** head){
+    struct Node* prev = NULL;
+    struct Node* curr = *head;
+    struct Node*last = (*head)->next;
+    while(last != NULL){
+        curr->next = prev;
+        prev = curr;
+        curr = last;
+        last = last->next;
+    }
+    curr->next = prev;
+    *head = curr;
+}
+
+int main() {
+    struct Node* head = NULL;
+    add(1,&head);
+    add(2,&head);
+    add(3,&head);
+    add(4,&head);
+    print(head);
+    cout<<endl;
+    reverse(&head);
+    print(head);
+	return 0;
+}
