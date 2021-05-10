@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+// n n
+// Σ(Σ(max(a[l...r] x (r-l+1))))%1e9
+//l=1 r=1
+int n;
+map<pair<int,int>, int> m; // map for storing the max element of the subarray of rangle [l, r]
+map<int, ll> ans; // map for storing the sum of max elements of all subarrays of length l
+ll mod = 1e9 + 7;
+
+int build(int a[], int l, int r){ // recursive method to store all the max elements of diff subarray (top-down)
+
+    if(m.find({l, r}) != m.end()){ // if we have already found the max element in that range simply return it
+        return m[{l, r}];
+    }
+    
+    if(l == r){ // subarray of length 1. Filling the lowest level
+        m[{l, r}] = a[l];
+        ans[1] = (ans[1]%mod + a[l]%mod)%mod; // ans[1] stores the sum of all max element of subarrays of length 1
+        return a[l];
+    }
+    
+    m[{l, r}] = max(build(a, l, r-1), build(a, l+1, r)); // recursively filling the top levels with the value stored in lower levels 
+    
+    ans[r-l+1] = (ans[r-l+1]%mod + m[{l, r}]%mod)%mod;// ans[len] stores the sum of all max element of subarrays of length len
+    
+    return m[{l, r}]; // returning the value of max element in range [l..r];
+}
+
+int main() {
+	ios_base :: sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	cin>>n;
+	int a[n+1];
+	for(int i=1;i<=n;i++){
+	    cin>>a[i];
+	}
+	
+	build(a, 1, n);
+	
+	int cnt = 0;
+	for(int i=1;i<=n;i++){ 
+	    ans[i] = (ans[i]%mod * i%mod)%mod;
+	    cnt = (cnt%mod + ans[i]%mod)%mod;
+	}
+	cout<<cnt;
+	return 0;
+}
