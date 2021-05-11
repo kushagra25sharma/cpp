@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+// Shortest Path Revisited Hackerearth
+const int maxn = 1e5 + 14, maxk = 20;
+ 
+int n, m, k;
+ll dp[maxn][maxk];// stores weight of every possiblity from 0 to k offers for every node
+set<pair<ll, pair<int, int> > > s; // curr weight, curr vertex & offer remaining
+vector<pair<int, ll>> a[maxn]; // connected vertex & weight
+
+void knapsack(int u, int used, ll nw){
+    if(used <= k && nw < dp[u][used]){
+        s.erase({dp[u][used], {u, used}});
+        dp[u][used] = nw;
+        s.insert({dp[u][used], {u, used}});
+    }
+}
+
+int main(){
+    ios::sync_with_stdio(0), cin.tie(0);
+    cin >> n >> m >> k;
+    for(int i = 0; i < m; i++){
+        int v, u;
+        ll w;
+        cin >> u >> v >> w;
+        u--, v--;
+        a[u].push_back({v, w});
+        a[v].push_back({u, w});
+    }
+    for(int i=0;i<=n;i++){
+		for(int j=0;j<=k;j++){
+			dp[i][j] = 1e18;
+		}
+	}
+    dp[0][0] = 0;
+    s.insert({0, {0, 0}});
+    while(s.size()){
+        auto [v, used] = s.begin() -> second; // curr vertex and offer remaining
+        s.erase(s.begin());
+        for(auto [u, w] : a[v]){ // coonected vertex and weight b/w them
+            knapsack(u, used, dp[v][used] + w); // without using the offer
+            knapsack(u, used + 1, dp[v][used]); // using the offer
+        }
+    }
+    for(int i = 0; i < n; i++){
+		long long mini = 1e18;
+		for(int j=0;j<=k;j++){
+			mini = min(mini, dp[i][j]);
+		}
+		cout<<mini<<" ";
+	}
+}
