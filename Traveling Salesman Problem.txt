@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+int n,m,st;
+vector<pair<int, ll>> a[20];
+ll ans = 1e18;
+// Traveling Salesman Problem 
+// Given index of the starting city, the salesman has to visit each city only once and has to come back to the
+// starting city. Find the minimum distance he has to travel.
+
+void solve(int num, int cnt, vector<int> vis, ll cost){
+    if(cnt == n){ // cnt == n means all cities have been visited
+        for(auto x : a[num]){
+            if(x.first == st){ // if there is a path from the current city to starting city then calculate the ans
+                ans = min(ans, cost + x.second);
+                return;
+            }
+        }
+    }
+    vis[num] = 1;
+    for(auto x : a[num]){
+        if(!vis[x.first]){
+            solve(x.first, cnt+1, vis, cost + x.second);
+        }
+    }
+}
+
+int main() {
+	ios_base :: sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	cin>>n>>m>>st;
+	for(int i=0;i<m;i++){
+	    int u,v;
+	    ll w;
+	    cin>>u>>v>>w;
+	    a[u].push_back({v, w});
+	    a[v].push_back({u, w});
+	}
+	vector<int> vis(20, 0);
+	solve(st, 1, vis, 0);
+	cout<<ans;
+	return 0;
+}
