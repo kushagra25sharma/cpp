@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+// Length of Longest increasing subsequence
+int main() {
+	ios_base :: sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	int t;
+	cin>>t;
+	while(t--){
+	    int n;
+	    cin>>n;
+	    vector<int> a(n);
+	    for(int i=0;i<n;i++){
+	        cin>>a[i];
+	    }
+	    // this vector contains all elements which can be appended into the new element so that we can form subsequence (increasing)
+	    vector<int> ans(n,0); 
+	    ans[0] = a[0];
+	    int len = 1; // initially the len (final answer) will be 1 i.e. first element only
+	    for(int i=1;i<n;i++){
+	        auto it = lower_bound(ans.begin(), ans.begin() + len, a[i]);
+	        if(it == (ans.begin() + len)){ // if no element in ans is greater than or equal to a[i] that means 
+	        // we can extend each subsequence so add it to ans array and increase the index pointer(len) which is also the length of longest increasing subsequence
+	            ans[len] = a[i];
+	            len++;
+	        }
+	        else{ // if *it element present in ans is just greater than or equal to a[i] then we replace it with a[i]
+	        // because if we can create a subsequence with element greater than a[i] we can create the same by using a[i] so no need of having current *it
+	            *it = a[i]; 
+	        }
+	    }
+	    cout<<len<<'\n';
+	}
+	return 0;
+}
