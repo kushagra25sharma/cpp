@@ -1,5 +1,6 @@
 // Leetcode : kth ancestor of tree node
 // Binary Lifting
+
 class TreeAncestor {
     int LOG;
     vector<vector<int>> up; // 2D vextor for storing the ancestor of current vertex at 2^m levels up from it (0<=m<LOG)
@@ -18,6 +19,8 @@ public:
         
         // pre calculating all the ancestors of the current vertex at 2^j level above it where 0<=j<LOG (powers of 2)
         // so if we want to go up by 19 we can do by 16+2+1. This is called Binary Lifting
+        
+        // when the node are in sorted order 0->1->2->3 or 0->7->9->18 we are using this function otherwise we have to do dfs to fill the ancestors.
         for(int vertex = 0; vertex < n; vertex++){
             up[vertex][0] = parent[vertex];// initialising the parent one level above the current vertex
             if(vertex != 0){
