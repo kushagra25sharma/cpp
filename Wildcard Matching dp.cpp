@@ -15,7 +15,7 @@ public:
                 if(i == 0 and j == 0){ // if length of both the strings is 0
                     dp[i][j] = 1;
                 }
-                else if(i == 0){ // if p string contains only *
+                else if(i == 0){ // if j-1 index of string p contains *
                     dp[i][j] = (dp[i][j-1] and p[j-1] == '*');
                 }
                 else if(j == 0){ // if p is empty and s is not empty
