@@ -6,12 +6,6 @@ using namespace std;
 //Update: add value v to all the elements in rangle [l.. r]
 int n, BIT[100001], a[100001]; // 1 based indexing
 
-void build(int index, int num){
-    for(int i = index; i <= n; i += i&(-i)){
-        BIT[i] += num;
-    }
-}
-
 void update(int index, int num){ // to increment index with val num
     for(int i = index; i <= n; i += i&(-i)){
         BIT[i] += num;
@@ -33,8 +27,8 @@ int main() {
 	cin>>n;
 	for(int i=1;i<=n;i++){
 	    cin>>a[i];
-	    build(i, a[i]);
-	    build(i+1, -a[i]);
+	    update(i, a[i]);
+	    update(i+1, -a[i]);
 	}
 	int q; // no of range sum queries
 	cin>>q;
