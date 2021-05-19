@@ -4,14 +4,7 @@ using namespace std;
 //Point Update, Range Sum Query Binary Indexed Tree
 int n, BIT[100001], a[100001]; // 1 based indexing
 
-void build(int index, int num){
-    for(int i = index; i <= n; i += i&(-i)){
-        BIT[i] += num;
-    }
-}
-
 void update(int index, int num){
-    num -= a[index];
     for(int i = index; i <= n; i += i&(-i)){
         BIT[i] += num;
     }
@@ -32,7 +25,7 @@ int main() {
 	cin>>n;
 	for(int i=1;i<=n;i++){
 	    cin>>a[i];
-	    build(i, a[i]);
+	    update(i, a[i]);
 	}
 	int q; // no of range sum queries
 	cin>>q;
@@ -42,7 +35,7 @@ int main() {
 	    int l, r;
 	    cin>>l>>r;
 	    if(type == 1){
-	        update(l, r); // change the value at index l to r
+	        update(l, r); // inrease the value at index l by r
 	    }
 	    else
 	    cout<<"Sum of elements in range ["<<l<<" - "<<r<<"] is "<<(query(r) - query(l-1))<<"\n";
