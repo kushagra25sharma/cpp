@@ -5,17 +5,22 @@ vector<pair<int, ll>> v[1000001];
 int dist[1000001];
 
 void dijkstra(){
-    multiset<pair<int, ll>> p;
+    multiset<pair<ll, int>> p;
     // from  0 to all other nodes 0 based indexing
+    vector<int> vis(1000001, 0);
     dist[0] = 0;
     p.insert({0, 0});
     while(p.size()){
-        pair<int, ll> num = *p.begin();
+        pair<ll, int> num = *p.begin();
+	if(vis[num.second]){
+	    continue;	
+	}
+	vis[num.second] = 1;
         p.erase(p.begin());
-        for(auto z : v[num.first]){
-            if(dist[num.first] + z.second < dist[z.first]){
-                dist[z.first] = dist[num.first] + z.second;
-                p.insert({z.first, dist[z.first]});
+        for(auto z : v[num.second]){
+            if(dist[num.second] + z.second < dist[z.first]){
+                dist[z.first] = dist[num.second] + z.second;
+                p.insert({dist[z.first], z.first});
             }
         }
     }
