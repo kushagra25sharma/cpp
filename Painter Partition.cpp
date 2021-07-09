@@ -5,7 +5,6 @@ using namespace std;
 // Given an array in which ith element represent the length of ith board. Painting 1 unit of board takes 1 unit
 // of time. Given k painters divide them such that the total time to complete the work is minimum. Each painter
 // can only paint consecutive boards.
-int prefix[10], dp[10][10];
 
 int countPainters(vector<int>& a, int maxTime){
     int sum = 0, n = a.size(), cnt = 1;
