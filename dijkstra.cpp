@@ -12,11 +12,11 @@ void dijkstra(){
     p.insert({0, 0});
     while(p.size()){
         pair<ll, int> num = *p.begin();
+	p.erase(p.begin());
 	if(vis[num.second]){
 	    continue;	
 	}
 	vis[num.second] = 1;
-        p.erase(p.begin());
         for(auto z : v[num.second]){
             if(dist[num.second] + z.second < dist[z.first]){
                 dist[z.first] = dist[num.second] + z.second;
