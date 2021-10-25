@@ -8,7 +8,7 @@ int dfs(int u,int l,vector<vector<int>>&adj,vector<bool>&vis)
             if(dfs(adj[u][i],u,adj,vis))
             return 1;
         }
-        else if(vis[adj[u][i]] && adj[u][i]!=l)
+        else if(vis[adj[u][i]] && adj[u][i]!=l) // adjacent vertex is visited and if it is not the parent, that means there is a cycle in the graph.
         return 1;
     }
     return 0;
